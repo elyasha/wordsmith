@@ -9,15 +9,19 @@ describe('', function () {
   it('', function() {
     let structureOne = function() {
       const getSuggestions = () => {
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === XMLHttpRequest.DONE) {
-            renderResponse(xhr.response)
-          }
-        }
+    		const endpoint = `${url}${queryParams}${$wordQuery}${additionalParams}${topicQuery}`
+      }
+    };
+
+    let structureTwo = function() {
+      const getSuggestions = () => {
+        const endpoint = url + queryParams + wordQuery + additionalParams + topicQuery
       }
     };
 
     let isMatchOne = Structured.match(code, structureOne);
-    assert.isOk(isMatchOne, 'Did you delete `renderRawResponse` and replace it with `renderResponse`?')
+    let isMatchTwo = Structured.match(code, structureTwo);
+
+    assert.isOk(isMatchOne || isMatchTwo, 'Did you set `const endpoint` equal to a concatenated string of `url`, `queryParams`, `wordQuery`, `additionalParams`, and `topicQuery` respectively?');
   });
 });
