@@ -1,40 +1,38 @@
 // Information to reach API
-const url = 'https://api.datamuse.com/words?';
-const queryParams = 'rel_jjb=';
-const additionalParams = '&topics='
+const url = 'https://api.datamuse.com/words';
+const queryParams = '?sl=';
 
-// Selecting page elements
+// Selects page elements
 const inputField = document.querySelector('#input');
-const topicField = document.querySelector('#topic');
 const submit = document.querySelector('#submit');
 const responseField = document.querySelector('#responseField');
 
 // AJAX function
 const getSuggestions = () => {
   const wordQuery = inputField.value;
-  const topicQuery = topicField.value;
-  const endpoint = `${url}${queryParams}${wordQuery}${additionalParams}${topicQuery}`;
+  const endpoint = `${url}${queryParams}${wordQuery}`;
   
-  const xhr = new XMLHttpRequest();
-  xhr.responseType = 'json';
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      renderResponse(xhr.response);
+  fetch(endpoint, {cache: 'no-cache'}).then(response => {
+    if (response.ok) {
+      return response.json();
     }
-  }
-  
-  xhr.open('GET', endpoint);
-  xhr.send();
+    throw new Error('Request failed!');
+  }, networkError => {
+    console.log(networkError.message)
+  })
+  .then((jsonResponse) => {
+    // renderRawResponse(jsonResponse)
+    renderResponse(jsonResponse)
+  })
 }
 
-// Clear previous results and display results to webpage
+// Clears previous results and display results to webpage
 const displaySuggestions = (event) => {
   event.preventDefault();
   while(responseField.firstChild){
     responseField.removeChild(responseField.firstChild);
   }
   getSuggestions();
-}
+};
 
 submit.addEventListener('click', displaySuggestions);

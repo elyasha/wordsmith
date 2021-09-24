@@ -9,19 +9,23 @@ describe('', function () {
   it('', function() {
     let structureOne = function() {
       const getSuggestions = () => {
-    		const endpoint = `${url}${queryParams}${$wordQuery}${additionalParams}${topicQuery}`
+        _.then(_).then(jsonResponse => {
+          renderRawResponse(jsonResponse)
+        })
       }
     };
 
-    let structureTwo = function() {
+    let structureTwo = function(){
       const getSuggestions = () => {
-        const endpoint = url + queryParams + wordQuery + additionalParams + topicQuery
+        _.then(_).then(jsonResponse => {
+          renderResponse(jsonResponse)
+        })
       }
-    };
+    }
 
     let isMatchOne = Structured.match(code, structureOne);
     let isMatchTwo = Structured.match(code, structureTwo);
-
-    assert.isOk(isMatchOne || isMatchTwo, 'Did you set `const endpoint` equal to a concatenated string of `url`, `queryParams`, `wordQuery`, `additionalParams`, and `topicQuery` respectively?');
+    assert.isNotOk(isMatchOne , 'Did you delete `renderRawResponse(jsonResponse)`?');
+    assert.isOk(isMatchTwo, 'Did you call `renderResponse(jsonResponse)` in the callback?')
   });
 });
